@@ -1,0 +1,18 @@
+apply from: "medias.gradle"
+apply from: "config.gradle"
+apply from: "categories.gradle"
+apply from: "products.gradle"
+
+tasks.withType(GroovyCompile) {
+    options.encoding = "UTF-8"
+}
+
+task productCatalog {
+    def catalogName = "${projectName}ProductCatalog"
+    def path = "${sampleImpexLocation}/productCatalogs/${catalogName}/"
+    logger.debug("generate $catalogName")
+    ant.mkdir(dir: path)
+//    categories.execute();
+//    classifications.execute();
+//    categoryMedias.execute();
+}

@@ -1,0 +1,62 @@
+import Impex
+
+task products(type : Impex) {
+    template = file("templates/products.tpl")
+    impex = file(impexPaths['products'])
+    values = ['projectName': projectName,
+              'man':manufacturers,
+              'cat': getLeafCategories(categories),
+              'units': units,
+              'rnd': random
+    ]
+    doFirst {
+        def csv = file(csvPath)
+        List products = csv.exists() ? csv.readLines() : generateCodes(csv).readLines()
+        values << ['products' : products]
+    }
+}
+
+//TODO split products into different classes
+task clProducts(type: Impex) {
+    dependsOn products
+
+    template = file("templates/productsClassifications.tpl")
+    impex = file(impexPaths['clProducts'])
+    values = [
+            'projectName': projectName,
+            'features': classificationsOptions['classAttributes'].values().flatten().collate(2),
+            'products': file(csvPath).readLines(),
+            'samples': classificationsOptions['sampleValues'],
+            'rnd': random
+    ]
+    doFirst {
+        println(classificationsOptions['classAttributes'].values().flatten().collate(2))
+    }
+}
+
+
+
+static File generateCodes(file) {
+    def letters = ("a".."z").join()
+    def numbers= (0..9).join()
+    def rand = new Random()
+    file.createNewFile()
+    file.withPrintWriter {writer ->
+        1.upto(numberOfProductsToGenerate) {
+            def let = (1..2).collect { letters[rand.nextInt(letters.length())] }.join()
+            def num = (1..4).collect { numbers[rand.nextInt(numbers.length())] }.join()
+            writer.println("${let}_${num}")
+        }
+    }
+    return file
+}
+
+static List getLeafCategories(categories) {
+    def result = []
+    if (categories[0] instanceof List) categories.each {result.addAll(getLeafCategories(it))}
+    else categories.tail().each {
+        if (it instanceof List) result.addAll(getLeafCategories(it))
+        else result.add(it)
+    }
+    return result
+}

@@ -1,0 +1,51 @@
+import Impex
+
+apply from: "config.gradle"
+
+task categoryMedias (type: Impex) {
+    template = file("templates/categoriesMedia.tpl")
+    impex = file(impexPaths['categoriesMedia'])
+    values = ['projectName': projectName]
+    doFirst {
+        File imageDir = file("images/categories/")
+        def destination = "${productCatalogLocation}images/categories/"
+        def list = categoriesOptions.names.flatten()
+        values << ['low_pic': convertImages(imageDir, list, "200x200", destination)]
+        values << ['thumbs': convertImages(imageDir, list, "75x75", destination)]
+    }
+}
+
+task productMedias (type:Impex) {
+    template = file("templates/productsMedia.tpl")
+    impex = file(impexPaths['productsMedia'])
+    doFirst {
+        File imageDir = file("images/products/")
+        def destination = "${productCatalogLocation}images/products/"
+        def productList = file(csvPath).readLines()
+        values << ['1200Wx1200H': convertImages(imageDir, productList, "1200x1200", destination)]
+        values << ['515Wx515H': convertImages(imageDir, productList, "515x515", destination)]
+        values << ['300Wx300H': convertImages(imageDir, productList, "300x300", destination)]
+        values << ['96Wx96H': convertImages(imageDir, productList, "96x96", destination)]
+        values << ['65Wx65H': convertImages(imageDir, productList, "65x65", destination)]
+        values << ['30Wx30H': convertImages(imageDir, productList, "30x30", destination)]
+    }
+}
+
+def convertImages(imageDir, names, format, destination) {
+    def img = names.iterator()
+    def result = []
+    ant.mkdir(dir: destination)
+    imageDir.listFiles().each { file ->
+        def name = names.hasNext() ? names.next() : "unused"
+        def filename = "${format}_${name}.jpg"
+        def fullpath = "${destination}${filename}"
+        result << [category, filename]
+        ant.exec(executable: 'magick', dir: imageDir) {
+            arg line: "convert -resize"
+            arg value: format
+            arg value: file.name
+            arg value: fullpath
+        }
+    }
+    return result
+}

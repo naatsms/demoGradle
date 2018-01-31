@@ -1,0 +1,43 @@
+import Impex
+
+task classificationUnits(type: Impex) {
+    template = file("templates/units.tpl")
+    impex = file(impexPaths['clUnits'])
+    values = ['projectName': projectName,
+              'units': units]
+}
+
+
+task classifications(type: Impex) {
+    template = file("templates/classifications.tpl")
+    impex = file(impexPaths['clCategories'])
+    values = ['projectName': projectName,
+              'classAttributes': classificationsOptions.classAttributes,
+              'classCategories': classificationsOptions.classCategories,
+              'units': units,
+              'rnd': random]
+}
+
+
+task categories(type : Impex) {
+    template = file("templates/categories.tpl")
+    impex = file(impexPaths['categories'])
+    values = ['projectName': projectName,
+              'lines': categories.flatten(),
+              'relations': createRelations(categories)]
+}
+
+List createRelations(List names) {
+    def result = []
+    if (names[0] instanceof List) names.each {
+        result += createRelations(it)
+    }
+    else (names.size() - 1).downto 1, { index ->
+        if (names[index] instanceof List) {
+            result << [names[index][0],names[0]]
+            result += createRelations(names[index])
+        }
+        else result << [names[index],names[0]]
+    }
+    return result
+}
