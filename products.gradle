@@ -17,7 +17,7 @@ task products(type : Impex) {
 }
 
 //TODO split products into different classes
-task clProducts(type: Impex) {
+task productClassifications(type: Impex) {
     dependsOn products
 
     template = file("templates/productsClassifications.tpl")
@@ -30,7 +30,7 @@ task clProducts(type: Impex) {
             'rnd': random
     ]
     doFirst {
-        println(classificationsOptions['classAttributes'].values().flatten().collate(2))
+        println(classAttributes.values().flatten().collate(2))
     }
 }
 
@@ -46,6 +46,20 @@ task productPrices(type: Impex) {
             'currencies': currencies,
             'priceRange': priceRange,
             'minPrice': minPrice
+    ]
+}
+
+task productRelations(type: Impex) {
+    dependsOn products
+
+    template file('templates/relations.tpl')
+    impex file(impexPaths['references'])
+    values = [
+            'productCatalog': productCatalogId,
+            'products': file(csvPath).readLines(),
+            'rnd': random,
+            'relationsCount': relationsCount,
+            'relations': relations
     ]
 }
 

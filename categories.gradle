@@ -19,7 +19,7 @@ task classifications(type: Impex) {
 }
 
 
-task categories(type : Impex) {
+task categoriesTree(type : Impex) {
     template = file("templates/categories.tpl")
     impex = file(impexPaths['categories'])
     values = ['projectName': projectName,

@@ -18,16 +18,31 @@ ext.impexPaths = [
         'prices' : "${productCatalogLocation}/products-prices.impex",
         'clProducts' : "${productCatalogLocation}/products-classifications.impex",
         'references' : "${productCatalogLocation}/products-relations.impex",
+
         'stocklevels' : "${productCatalogLocation}/products-stocklevels.impex",
 ]
 
 //product options
 ext.csvPath = "data/products.csv"
-ext.numberOfProductsToGenerate = 100
+ext.productsCount = 100
+ext.relationsCount = 200
 ext.minPrice = 1000
 ext.priceRange = 15000
 ext.currencies = ['USD': 0.02, 'RUB': 1.0] // currency : multiplier
-
+ext.relations = [
+        "ACCESSORIES",
+        "BASE_PRODUCT",
+        "CONSISTS_OF",
+        "DIFF_ORDERUNIT",
+        "FOLLOWUP",
+        "MANDATORY",
+        "SIMILAR",
+        "SELECT",
+        "SPAREPART",
+        "OTHERS",
+        "UPSELLING",
+        "CROSSELLING"
+]
 
 ext.categories = [ //nested lists, 1st is a supercategory for others
         ["бочки", ["круглые", "квадратные", ["дырявые", 'треугольные'], 'восьмигранные']],
