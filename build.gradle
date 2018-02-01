@@ -8,11 +8,13 @@ tasks.withType(GroovyCompile) {
 }
 
 task productCatalog {
-    def catalogName = "${projectName}ProductCatalog"
-    def path = "${sampleImpexLocation}/productCatalogs/${catalogName}/"
-    logger.debug("generate $catalogName")
-    ant.mkdir(dir: path)
-//    categories.execute();
-//    classifications.execute();
-//    categoryMedias.execute();
+    logger.lifecycle("generate $productCatalogId")
+    classificationUnits.execute()
+    categories.execute()
+    classifications.execute()
+    categoryMedias.execute()
+    products.execute()
+    productMedias.execute()
+    clProducts.execute()
+    productPrices.execute()
 }

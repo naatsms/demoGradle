@@ -8,8 +8,8 @@ task categoryMedias (type: Impex) {
     values = ['projectName': projectName]
     doFirst {
         File imageDir = file("images/categories/")
-        def destination = "${productCatalogLocation}images/categories/"
-        def list = categoriesOptions.names.flatten()
+        def destination = categoryImagesPath
+        def list = categories.flatten()
         values << ['low_pic': convertImages(imageDir, list, "200x200", destination)]
         values << ['thumbs': convertImages(imageDir, list, "75x75", destination)]
     }
@@ -18,28 +18,30 @@ task categoryMedias (type: Impex) {
 task productMedias (type:Impex) {
     template = file("templates/productsMedia.tpl")
     impex = file(impexPaths['productsMedia'])
+    values = ['projectName': projectName]
     doFirst {
         File imageDir = file("images/products/")
-        def destination = "${productCatalogLocation}images/products/"
+        def destination = productImagesPath
         def productList = file(csvPath).readLines()
-        values << ['1200Wx1200H': convertImages(imageDir, productList, "1200x1200", destination)]
-        values << ['515Wx515H': convertImages(imageDir, productList, "515x515", destination)]
-        values << ['300Wx300H': convertImages(imageDir, productList, "300x300", destination)]
-        values << ['96Wx96H': convertImages(imageDir, productList, "96x96", destination)]
-        values << ['65Wx65H': convertImages(imageDir, productList, "65x65", destination)]
-        values << ['30Wx30H': convertImages(imageDir, productList, "30x30", destination)]
+        values << ['products': productList]
+        values << ['x1200': convertImages(imageDir, productList, "1200x1200", destination)]
+        values << ['x515': convertImages(imageDir, productList, "515x515", destination)]
+        values << ['x300': convertImages(imageDir, productList, "300x300", destination)]
+        values << ['x96': convertImages(imageDir, productList, "96x96", destination)]
+        values << ['x65': convertImages(imageDir, productList, "65x65", destination)]
+        values << ['x30': convertImages(imageDir, productList, "30x30", destination)]
     }
 }
 
-def convertImages(imageDir, names, format, destination) {
+List convertImages(imageDir, names, format, destination) {
     def img = names.iterator()
     def result = []
-    ant.mkdir(dir: destination)
+    ant.mkdir(dir: "${destination}/${format}/")
     imageDir.listFiles().each { file ->
-        def name = names.hasNext() ? names.next() : "unused"
+        def name = img.hasNext() ? img.next() : "unused"
         def filename = "${format}_${name}.jpg"
-        def fullpath = "${destination}${filename}"
-        result << [category, filename]
+        def fullpath = "${destination}/${format}/${filename}"
+        result << [name, filename]
         ant.exec(executable: 'magick', dir: imageDir) {
             arg line: "convert -resize"
             arg value: format

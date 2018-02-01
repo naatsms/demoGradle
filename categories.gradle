@@ -12,8 +12,8 @@ task classifications(type: Impex) {
     template = file("templates/classifications.tpl")
     impex = file(impexPaths['clCategories'])
     values = ['projectName': projectName,
-              'classAttributes': classificationsOptions.classAttributes,
-              'classCategories': classificationsOptions.classCategories,
+              'classAttributes': classAttributes,
+              'classCategories': classCategories,
               'units': units,
               'rnd': random]
 }

@@ -24,14 +24,29 @@ task clProducts(type: Impex) {
     impex = file(impexPaths['clProducts'])
     values = [
             'projectName': projectName,
-            'features': classificationsOptions['classAttributes'].values().flatten().collate(2),
+            'features': classAttributes.values().flatten().collate(2),
             'products': file(csvPath).readLines(),
-            'samples': classificationsOptions['sampleValues'],
+            'samples': sampleValues,
             'rnd': random
     ]
     doFirst {
         println(classificationsOptions['classAttributes'].values().flatten().collate(2))
     }
+}
+
+task productPrices(type: Impex) {
+    dependsOn products
+
+    template file('templates/prices.tpl')
+    impex file(impexPaths['prices'])
+    values = [
+            'productCatalog': productCatalogId,
+            'products': file(csvPath).readLines(),
+            'rnd': random,
+            'currencies': currencies,
+            'priceRange': priceRange,
+            'minPrice': minPrice
+    ]
 }
 
 

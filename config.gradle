@@ -1,32 +1,45 @@
 ext.projectName = 'demo'
+
+//paths options
 ext.hybrisPath = 'C:/root/Projects/demo/hybris'
+ext.productCatalogId = "${projectName}ProductCatalog"
 ext.initialDataPath = "${hybrisPath}/bin/custom/${projectName}/${projectName}initialdata"
 ext.sampleImpexLocation = "${initialDataPath}/resources/${projectName}initialdata/import/sampledata"
-ext.productCatalogLocation = "${sampleImpexLocation}/productCatalogs/${projectName}ProductCatalog/"
+ext.productCatalogLocation = "${sampleImpexLocation}/productCatalogs/${projectName}ProductCatalog"
+ext.categoryImagesPath = "${productCatalogLocation}/images/categories"
+ext.productImagesPath = "${productCatalogLocation}/images/products"
+ext.impexPaths = [
+        'clUnits' : "${productCatalogLocation}/classifications-units.impex",
+        'categories' : "${productCatalogLocation}/categories.impex",
+        'clCategories' : "${productCatalogLocation}/categories-classifications.impex",
+        'categoriesMedia' : "${productCatalogLocation}/categories-media.impex",
+        'products' : "${productCatalogLocation}/products.impex",
+        'productsMedia' : "${productCatalogLocation}/products-media.impex",
+        'prices' : "${productCatalogLocation}/products-prices.impex",
+        'clProducts' : "${productCatalogLocation}/products-classifications.impex",
+        'references' : "${productCatalogLocation}/products-relations.impex",
+        'stocklevels' : "${productCatalogLocation}/products-stocklevels.impex",
+]
 
+//product options
 ext.csvPath = "data/products.csv"
 ext.numberOfProductsToGenerate = 100
+ext.minPrice = 1000
+ext.priceRange = 15000
+ext.currencies = ['USD': 0.02, 'RUB': 1.0] // currency : multiplier
 
-ext.impexPaths = [
-        'clUnits' : "${productCatalogLocation}classifications-units.impex",
-        'categories' : "${productCatalogLocation}categories.impex",
-        'clCategories' : "${productCatalogLocation}categories-classifications.impex",
-        'categoriesMedia' : "${productCatalogLocation}categories-media.impex",
-        'products' : "${productCatalogLocation}products.impex",
-        'productsMedia' : "${productCatalogLocation}products-media.impex",
-        'clProducts' : "${productCatalogLocation}products-classifications.impex",
-        'references' : "${productCatalogLocation}products-relations.impex",
-        'prices' : "${productCatalogLocation}products-prices.impex",
-        'stocklevels' : "${productCatalogLocation}products-stocklevels.impex",
-]
 
 ext.categories = [ //nested lists, 1st is a supercategory for others
         ["бочки", ["круглые", "квадратные", ["дырявые", 'треугольные'], 'восьмигранные']],
         ["коробки","большие","маленькие","средние"]
 ]
 
-ext.classificationsOptions = [
-        classAttributes: [ // class : [[attr1,type],attr2]
+//classification options
+ext.units = [ // [code / symbol / name]
+              ['111', 'см', 'Сантиметр'],
+              ['112', 'м', 'Метр']
+]
+ext.classAttributes = [ // class : [[attr1,type]]
                 'class1':[
                         ["value",'boolean'],
                         ["value2",'number'],
@@ -35,26 +48,21 @@ ext.classificationsOptions = [
                 'class2':[
                         ["value4",'boolean']
                 ]
-        ],
-        classCategories: [ // class : category relation (empty for random)
+]
+ext.classCategories = [ // class : category relation
                 'class1':'бочки',
                 'class2':'зеленые'
-        ],
-        sampleValues: [ // edit if needed
+]
+ext.sampleValues = [ // edit if needed
                 'boolean':[true,false],
                 'string': ['one','two','three'],
                 'number': 1..100
-        ]
 ]
-
-ext.manufacturers = [ // manufacturerName / AID
+ext.manufacturers = [ // manufacturerName , AID
                 ['Vasya unltd','vasya aid'],
                 ['Petya incorporated','petya aid']
 ]
 
-ext.units = [ // [code / symbol / name]
-        ['111', 'см', 'Сантиметр'],
-        ['112', 'м', 'Метр']
-]
 
+//utils
 ext.random = new Random()
