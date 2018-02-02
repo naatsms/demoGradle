@@ -1,12 +1,24 @@
+import org.codehaus.groovy.control.io.URLReaderSource
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'org.jsoup:jsoup:1.8.3'
+    }
+}
+
 apply from: "medias.gradle"
 apply from: "config.gradle"
 apply from: "categories.gradle"
 apply from: "products.gradle"
+apply from: "parser.gradle"
 
 tasks.withType(GroovyCompile) {
     options.encoding = "UTF-8"
 }
-
 
 task productCatalog {
     logger.lifecycle("generate $productCatalogId")
@@ -21,4 +33,12 @@ task productCatalog {
     //productPrices.execute()
     productRelations.execute()
 
+}
+
+task parseProducts {
+    dependsOn buildEnvironment
+    def url = 'https://shop.okraina.ru/catalog/all/'
+    def document = org.jsoup.Jsoup.parse(new URL(url),1000)
+    def products = document.getElementsByClass("catalog-item-title")
+    println products
 }
