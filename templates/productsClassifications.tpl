@@ -15,7 +15,7 @@ features.each {
 INSERT_UPDATE Product;code[unique=true];<% features.each {print "\$${it[0]};"}%>\$catalogVersion;
 <%
 products.each { product ->
-  print ";${product};"
+  print ";${product[0]};"
   features.each { ft ->
     def range = samples[ft[1]]
     def pos = rnd.nextInt(range.size())

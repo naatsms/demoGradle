@@ -41,14 +41,14 @@ x30.each {
 INSERT_UPDATE MediaContainer; qualifier[unique = true]; \$medias; \$catalogVersion
 <%
 products.eachWithIndex { product, index ->
-  println ";mc_${product};${x1200[index][1]},${x515[index][1]},${x300[index][1]},${x96[index][1]},${x65[index][1]},${x30[index][1]};"
+  println ";mc_${product[0]};${x1200[index][1]},${x515[index][1]},${x300[index][1]},${x96[index][1]},${x65[index][1]},${x30[index][1]};"
 }
 %>
 
 UPDATE Product; code[unique = true]; \$picture; \$thumbnail; \$detail; \$others; \$normal; \$thumbnails; \$galleryImages; \$catalogVersion
 <%
 products.eachWithIndex { product, index ->
-  print ";${product};"
+  print ";${product[0]};"
   print "${x300[index][1]};"
   print "${x96[index][1]};"
   print "${x1200[index][1]};"

@@ -63,6 +63,20 @@ task productRelations(type: Impex) {
     ]
 }
 
+task productStocks(type: Impex) {
+    dependsOn productsCount
+
+    template file('templates/stocks.tpl')
+    impex file(impexPaths['stocks'])
+    values = [
+            productCatalog: productCatalogId,
+            products: file(csvPath).readLines(),
+            rnd: random,
+            vendor: vendor,
+            warehouses: warehouses
+    ]
+}
+
 
 
 static File generateCodes(file) {

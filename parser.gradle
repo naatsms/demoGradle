@@ -1,1 +1,70 @@
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import org.jsoup.nodes.Element
 
+task parseProducts {
+    dependsOn buildEnvironment
+    def sourceLinks = [
+            "${baseUrl}/catalog/Kolbasy/?limit=900",
+            "${baseUrl}/catalog/delikatesy/?limit=900",
+            "${baseUrl}/catalog/okhlazhdennye-polufabrikaty/?limit=900"
+    ]
+
+    def productDataList = []
+    sourceLinks.each { link ->
+        def products = Jsoup.parse(new URL(url),5000).getElementsByClass("catalog-item-title")
+        products.each { -> div
+            try {
+                def subUrl = div.getElementsByAttribute('href').attr('href')
+                def detailPage = Jsoup.parse(new URL(baseUrl + subUrl), 5000)
+                addProductDataToList(productDataList, div, detailPage)
+            } catch (ignored) {}
+        }
+    }
+
+    writeCsv(productDataList)
+}
+
+private writeCsv(List productData) {
+    file(csvPath).withPrintWriter { pr ->
+        lines.each {
+            pr.println("${it[0]};${it[1]};${it[2]}");
+        }
+    }
+}
+
+private List addProductDataToList(List target, Element it, Document detailPage) {
+    String code = getProductCode(it)
+    String name = getProductName(detailPage)
+    String category = getProductCategory(detailPage)
+    downloadImage(code, detailPage)
+    [code, name, category]
+}
+
+static String getProductName(Document document) {
+    document.getElementsByClass('catalog-element').text()
+}
+
+static String getProductCode(Element it) {
+    return it.getElementsByClass('spanarticle').text().split(" ")[1]
+}
+
+void downloadImage(String code, detailPage) {
+    def downloadUrl = detailPage.getElementsByClass('catalog-detail-images').attr('href')
+    def dest = "images/products/${code}.jpg"
+    ant.touch(file: dest, mkdirs: true)
+    file(dest).withOutputStream { out ->
+        new URL(baseUrl + downloadUrl).withInputStream { input ->
+            input.eachByte { bt ->
+                out.write(bt)
+            }
+            input.close()
+        }
+        out.close()
+    }
+}
+
+static String getProductCategory(Document document) {
+    def lis = document.getElementById('breadcrumb').getElementsByAttribute('itemtype')
+    return lis.get(lis.size() - 2).getElementsByAttributeValue('itemprop','title').text()
+}

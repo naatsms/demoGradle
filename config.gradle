@@ -1,4 +1,5 @@
 ext.projectName = 'demo'
+ext.baseUrl = 'https://shop.okraina.ru' //url for example data
 
 //paths options
 ext.hybrisPath = 'C:/root/Projects/demo/hybris'
@@ -43,6 +44,10 @@ ext.relations = [
         "UPSELLING",
         "CROSSELLING"
 ]
+
+ext.vendor = 'Okraina'
+ext.warehouses = ['Central']
+
 
 ext.categories = [ //nested lists, 1st is a supercategory for others
         ["бочки", ["круглые", "квадратные", ["дырявые", 'треугольные'], 'восьмигранные']],

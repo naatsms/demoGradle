@@ -11,6 +11,6 @@ products.each { product ->
   def category = cat[rnd.nextInt(cat.size())]
   def manufacturer = man[rnd.nextInt(man.size())]
   def unit = units[rnd.nextInt(units.size())]
-  println ";${product};${category};${manufacturer[0]};${manufacturer[1]};${unit[0]};"
+  println ";${product[0]};${product[2]};${manufacturer[0]};${manufacturer[1]};${unit[0]};"
 }
 %>

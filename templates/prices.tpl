@@ -18,7 +18,7 @@ INSERT_UPDATE PriceRow; productId[unique = true]; unit(code[unique = true, defau
 products.each { product ->
   def price = rnd.nextInt(priceRange) + minPrice
   currencies.each {cur,mpl ->
-    println ";${product};;${cur};${mpl.multiply(price)};1;1;"
+    println ";${product[0]};;${cur};${mpl.multiply(price)};1;1;"
   }
 }
 %>

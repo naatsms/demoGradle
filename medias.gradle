@@ -24,12 +24,12 @@ task productMedias (type:Impex) {
         def destination = productImagesPath
         def productList = file(csvPath).readLines()
         values << ['products': productList]
-        values << ['x1200': convertImages(imageDir, productList, "1200x1200", destination)]
-        values << ['x515': convertImages(imageDir, productList, "515x515", destination)]
-        values << ['x300': convertImages(imageDir, productList, "300x300", destination)]
-        values << ['x96': convertImages(imageDir, productList, "96x96", destination)]
-        values << ['x65': convertImages(imageDir, productList, "65x65", destination)]
-        values << ['x30': convertImages(imageDir, productList, "30x30", destination)]
+        values << ['x1200': convertImages(imageDir, "1200x1200", destination)]
+        values << ['x515': convertImages(imageDir, "515x515", destination)]
+        values << ['x300': convertImages(imageDir, "300x300", destination)]
+        values << ['x96': convertImages(imageDir, "96x96", destination)]
+        values << ['x65': convertImages(imageDir, "65x65", destination)]
+        values << ['x30': convertImages(imageDir, "30x30", destination)]
     }
 }
 
@@ -39,6 +39,24 @@ List convertImages(imageDir, names, format, destination) {
     ant.mkdir(dir: "${destination}/${format}/")
     imageDir.listFiles().each { file ->
         def name = img.hasNext() ? img.next() : "unused"
+        def filename = "${format}_${name}.jpg"
+        def fullpath = "${destination}/${format}/${filename}"
+        result << [name, filename]
+        ant.exec(executable: 'magick', dir: imageDir) {
+            arg line: "convert -resize"
+            arg value: format
+            arg value: file.name
+            arg value: fullpath
+        }
+    }
+    return result
+}
+
+List convertImages(imageDir, format, destination) {
+    def result = []
+    ant.mkdir(dir: "${destination}/${format}/")
+    imageDir.listFiles().each { File file ->
+        def name = file.name.split(".")[0]
         def filename = "${format}_${name}.jpg"
         def fullpath = "${destination}/${format}/${filename}"
         result << [name, filename]

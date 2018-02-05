@@ -7,18 +7,16 @@
 INSERT_UPDATE Vendor;code[unique=true]
 ;\$vendor
 
-INSERT_UPDATE Warehouse;code[unique=true];vendor(code)[default=$vendor];default[default='false']
+INSERT_UPDATE Warehouse;code[unique=true];vendor(code)[default=\$vendor];default[default='false']
 <% warehouses.each {
 println ";${it};"
 }
 %>
 
 <% warehouses.each { warehouse ->
-println "INSERT_UPDATE StockLevel;available;warehouse(code)[default=${warehouse}unique=true];inStockStatus(code);maxPreOrder;maxStockLevelHistoryCount;overSelling;preOrder;productCode[unique=true];reserved
-  products.each { product ->
-    println ";${rnd.nextInt(100)};${warehouse};
-}
+    println "INSERT_UPDATE StockLevel;available;warehouse(code)[default=${warehouse}unique=true];inStockStatus(code)[default=notSpecified];maxPreOrder;maxStockLevelHistoryCount;overSelling;preOrder;productCode[unique=true];reserved
+    products.each { product ->
+        println ";${rnd.nextInt(100)};${warehouse};;0;0;${product[0]};0;"
+    }
+  }
 %>
-
-
-INSERT_UPDATE StockLevel;available;warehouse(code)[default='Nakano',unique=true];inStockStatus(code)[default='notSpecified'];overSelling;preOrder;productCode[unique=true];reserved
