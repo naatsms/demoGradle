@@ -1,0 +1,16 @@
+def store = "powertools"
+def store2 = "Powertools"
+def storefront = "powertoolsstore"
+def sourcePath = hybrisPath + "/bin/ext-data/${storefront}/resources/${storefront}/import/"
+
+task migrateImpex(type: Copy) {
+    from(sourcePath) {
+        filter {line ->
+            line.replaceAll(store, projectName).replaceAll(store2,projectName2)
+        }
+        eachFile {file ->
+            file.setPath(file.getSourcePath().replaceAll(store, projectName))
+        }
+    }
+    into impexLocation
+}

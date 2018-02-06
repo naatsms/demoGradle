@@ -1,12 +1,14 @@
 ext.projectName = 'demo'
+ext.projectName2 = 'Demo'
 ext.baseUrl = 'https://shop.okraina.ru' //url for example data
 
 //paths options
 ext.hybrisPath = 'C:/root/Projects/demo/hybris'
 ext.productCatalogId = "${projectName}ProductCatalog"
 ext.initialDataPath = "${hybrisPath}/bin/custom/${projectName}/${projectName}initialdata"
-ext.sampleImpexLocation = "${initialDataPath}/resources/${projectName}initialdata/import/sampledata"
-ext.productCatalogLocation = "${sampleImpexLocation}/productCatalogs/${projectName}ProductCatalog"
+
+ext.impexLocation = "${initialDataPath}/resources/${projectName}initialdata/import"
+ext.productCatalogLocation = "${impexLocation}/sampledata/productCatalogs/${projectName}ProductCatalog"
 ext.categoryImagesPath = "${productCatalogLocation}/images/categories"
 ext.productImagesPath = "${productCatalogLocation}/images/products"
 ext.impexPaths = [
