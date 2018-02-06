@@ -2,6 +2,16 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'org.jsoup:jsoup:1.8.3'
+    }
+}
+
 task parseProducts {
     dependsOn buildEnvironment
     def sourceLinks = [
@@ -12,8 +22,8 @@ task parseProducts {
 
     def productDataList = []
     sourceLinks.each { link ->
-        def products = Jsoup.parse(new URL(url),5000).getElementsByClass("catalog-item-title")
-        products.each { -> div
+        def products = Jsoup.parse(new URL(link),5000).getElementsByClass("catalog-item-title")
+        products.each { div ->
             try {
                 def subUrl = div.getElementsByAttribute('href').attr('href')
                 def detailPage = Jsoup.parse(new URL(baseUrl + subUrl), 5000)
@@ -27,7 +37,7 @@ task parseProducts {
 
 private writeCsv(List productData) {
     file(csvPath).withPrintWriter { pr ->
-        lines.each {
+        productData.each {
             pr.println("${it[0]};${it[1]};${it[2]}");
         }
     }
@@ -38,7 +48,7 @@ private List addProductDataToList(List target, Element it, Document detailPage) 
     String name = getProductName(detailPage)
     String category = getProductCategory(detailPage)
     downloadImage(code, detailPage)
-    [code, name, category]
+    target << [code, name, category]
 }
 
 static String getProductName(Document document) {

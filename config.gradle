@@ -19,8 +19,7 @@ ext.impexPaths = [
         'prices' : "${productCatalogLocation}/products-prices.impex",
         'clProducts' : "${productCatalogLocation}/products-classifications.impex",
         'references' : "${productCatalogLocation}/products-relations.impex",
-
-        'stocklevels' : "${productCatalogLocation}/products-stocklevels.impex",
+        'stocks' : "${productCatalogLocation}/products-stocklevels.impex",
 ]
 
 //product options

@@ -1,0 +1,41 @@
+def recipe = "b2b_acc"
+def projectName = "demo"
+def addons = "commerceorgsamplesaddon,promotionenginesamplesaddon,assistedservicestorefront,customerticketingaddon,orderselfserviceaddon,adaptivesearchsamplesaddon";
+
+def config = {
+	extensions {
+	    extName 'mcc'
+	    extName 'adaptivesearchsolr'
+        extName 'adaptivesearchbackoffice'
+        extName 'adaptivesearchsamplesaddon'
+        extName 'commerceservicesbackoffice'
+	    extName 'solrfacetsearchbackoffice'
+	    extName 'solrserver'
+	    extName 'ycommercewebservices'
+	    extName 'ycommercewebservicestest'
+
+	    extName 'electronicsstore'
+	    extName 'apparelstore'
+
+	    extName 'orderselfserviceaddon'
+
+	    extName 'customersupportbackoffice'
+	    extName 'customerticketingaddon'
+	    extName 'commerceorgsamplesaddon'
+
+	    extName 'rulebuilderbackoffice'
+	    extName 'couponbackoffice'
+	    extName 'droolsruleengineservices'
+	    extName 'couponfacades'
+	    extName 'promotionenginesamplesaddon'
+
+	    extName 'cmswebservices'
+	    extName 'smarteditwebservices'
+	    extName 'cmssmarteditwebservices'
+	    extName 'permissionswebservices'
+	    extName 'smarteditaddon'
+	    extName 'cmssmartedit'
+	    extName 'cmsbackoffice'
+        extName 'cmsmulticountrycockpit'
+	}
+}

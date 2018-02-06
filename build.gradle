@@ -1,17 +1,3 @@
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
-import org.jsoup.nodes.Element
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'org.jsoup:jsoup:1.8.3'
-    }
-}
-
 apply from: "medias.gradle"
 apply from: "config.gradle"
 apply from: "categories.gradle"

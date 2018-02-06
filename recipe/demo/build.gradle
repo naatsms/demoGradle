@@ -1,0 +1,72 @@
+def recipe = "b2b_acc"
+def projectName = "demo"
+def addons = "commerceorgsamplesaddon,promotionenginesamplesaddon,customerticketingaddon,adaptivesearchsamplesaddon";
+
+def config = {
+	extensions {
+	    extName 'mcc'
+	    extName 'adaptivesearchsolr'
+        extName 'adaptivesearchbackoffice'
+        extName 'adaptivesearchsamplesaddon'
+        extName 'commerceservicesbackoffice'
+	    extName 'solrfacetsearchbackoffice'
+	    extName 'solrserver'
+	    extName 'ycommercewebservices'
+	    extName 'ycommercewebservicestest'
+
+	    extName 'electronicsstore'
+	    extName 'apparelstore'
+
+	    extName 'customersupportbackoffice'
+	    extName 'customerticketingaddon'
+	    extName 'commerceorgsamplesaddon'
+
+	    extName 'rulebuilderbackoffice'
+	    extName 'couponbackoffice'
+	    extName 'droolsruleengineservices'
+	    extName 'couponfacades'
+	    extName 'promotionenginesamplesaddon'
+
+	    extName 'cmswebservices'
+	    extName 'smarteditwebservices'
+	    extName 'cmssmarteditwebservices'
+	    extName 'permissionswebservices'
+	    extName 'smarteditaddon'
+	    extName 'cmssmartedit'
+	    extName 'cmsbackoffice'
+        extName 'cmsmulticountrycockpit'
+		scanPathWithAutoLoad '${HYBRIS_BIN_DIR}' + "/custom/${projectName}"
+	}
+}
+
+task setup << {
+	apply plugin: 'installer-platform-plugin'
+	apply plugin: 'installer-addon-plugin'
+	def pl = platform(config)
+	pl.setup()
+	
+	pl.executeAntTarget "modulegen -Dinput.module=accelerator -Dinput.name=${projectName} -Dinput.package=ru.masterdata.demo -Dinput.template=develop"
+
+	pl.project.addons {
+		names "${addons}"
+		template "yacceleratorstorefront"
+		storeFronts "${projectName}storefront"
+		platform pl
+	}
+}
+
+task initialize << {
+    apply plugin: 'installer-platform-plugin'
+    def pl = platform(config)
+    pl.build()
+    pl.initialize()
+}
+
+
+task start << {
+    apply plugin: 'installer-platform-plugin'
+    def pl = platform(config)
+    pl.start()
+}
+
+
